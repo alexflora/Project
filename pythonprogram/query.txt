@@ -1,0 +1,25 @@
+create table personal(id int generated always as identity primary key,Name varchar(20) NOT NULL ,Age int,Gender varchar(20));
+
+insert into personal(Name,Age,Gender)values('Alexander',22,'Male'),('Susai',20,'Male'),('Raj',20,'Male');
+
+select * from personal;
+
+create table cdetails(c_id int generated always as identity primary key,p_id int not null,degree varchar(20),total int,foreign key(p_id) references personal);
+
+alter table personal rename column id to p_id;
+
+select * from personal;
+
+select * from cdetails;
+
+create table expense(e_id serial primary key,c_id int Not null ,month int,year int,foreign key(c_id) references cdetails(c_id));
+
+insert into cdetails(p_id,degree,total)values(1,'Bca',600),(2,'cs',400),(3,'Ms',500);
+
+insert into expense(e_id,c_id,month,year)values(1,1,1600,12000),(2,2,1600,14000);
+
+select name ,Age,Gender from personal cross join cdetails;
+
+select p.Name,p.Age,p.Gender,cd.degree,cd.total,e.month,e.year
+from personal as p inner join cdetails as cd on cd.p_id=p.p_id
+inner join expense as e on cd.p_id=e.c_id;
