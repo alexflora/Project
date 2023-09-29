@@ -1,0 +1,146 @@
+import re
+import pdfplumber
+import pandas as pd
+
+def should_skip_line(line):
+    skip_prefixes = [
+        "Result Gally Sheet",
+        "College :",
+        "College:",
+        "College",
+        "Course",
+        "No of Papers",
+        "No. of Papers",
+        "Total Paper(s) :",
+        "THIRUVALLUVAR",
+        "SubCode",
+        "UG",
+        "Sub Code ",
+        "Int",
+        "NOTE",
+        "UNIVERSITY",
+        "ELIGIBLE",
+        "NR",
+        "*",
+    ]
+    return any(line.startswith(prefix) for prefix in skip_prefixes)
+
+def extract_student_data(lines):
+    student_data_list = []
+    register_number = ""
+    student_name = ""
+    subjects = []
+
+    for line in lines:
+        # Skip lines that should be removed
+        if should_skip_line(line):
+            continue
+
+        # Extract and format the register number and student name
+        match_register = re.search(r'(\d{5}[A-Z]\d{5})\s+(.+)', line)
+        if match_register:
+            # If we are processing a new student, add the previous student's data to the list
+            if register_number and student_name:
+                # Pad subjects with 'NA' if there are fewer than 6 subjects
+                while len(subjects) < 6:
+                    subjects.append({
+                        "Subject Code": "NA",
+                        "Internal Mark": "NA",
+                        "External Mark": "NA",
+                        "Total Mark": "NA",
+                        "Status": "NA"
+                    })
+                student_data_list.append({
+                    "Register Number": register_number,
+                    "Student Name": student_name,
+                    "Subjects": subjects
+                })
+            register_number, student_name = match_register.groups()
+            subjects = []  # Reset subjects for the new student
+            continue  # Skip processing the rest of the line if it contains the register number
+
+        # Use a regular expression to extract the subject code, marks, and status
+        subject_matches = re.findall(r'([A-Z]+\d+\w*)\s+(-{3}|WHI|\d+|A{3})\s+(-{3}|WHI|\d+|A{3})\s+(-{3}|WHI|\d+|A{3})\s+(PASS|RA|(?:A{3}))', line)
+        if subject_matches:
+            for match in subject_matches:
+                subject_code = match[0]
+                # If all marks are "WHI", treat it as "NA"
+                if all(mark == "WHI" for mark in match[1:4]):
+                    internal_mark = "NA"
+                    external_mark = "NA"
+                    total_mark = "NA"
+                else:
+                    # Replace "WHI" with "NA" for marks and status
+                    internal_mark = match[1] if match[1] != 'WHI' else 'NA'
+                    external_mark = match[2] if match[2] != 'WHI' else 'NA'
+                    total_mark = match[3] if match[3] != 'WHI' else 'NA'
+
+                # Add leading zeros to marks to ensure three digits
+                internal_mark = internal_mark.zfill(3) if internal_mark != 'NA' else 'NA'
+                external_mark = external_mark.zfill(3) if external_mark != 'NA' else 'NA'
+                total_mark = total_mark.zfill(3) if total_mark != 'NA' else 'NA'
+                
+                # Create a dictionary for the current subject
+                subject_data = {
+                    "Subject Code": subject_code,
+                    "Internal Mark": internal_mark,
+                    "External Mark": external_mark,
+                    "Total Mark": total_mark,
+                    "Status": match[4] if match[4] != 'WHI' else 'NA'
+                }
+                subjects.append(subject_data)
+
+    # Add the last student's data to the list
+    if register_number and student_name:
+        # Pad subjects with 'NA' if there are fewer than 6 subjects
+        while len(subjects) < 6:
+            subjects.append({
+                "Subject Code": "NA",
+                "Internal Mark": "NA",
+                "External Mark": "NA",
+                "Total Mark": "NA",
+                "Status": "NA"
+            })
+        student_data_list.append({
+            "Register Number": register_number,
+            "Student Name": student_name,
+            "Subjects": subjects
+        })
+
+    return student_data_list
+
+# Open the PDF file
+pdf_path = r"C:/pythonprogram/U17-1.pdf"
+with pdfplumber.open(pdf_path) as pdf:
+    all_student_data = []
+
+    for page in pdf.pages:
+        page_text = page.extract_text()
+        lines = page_text.splitlines()
+
+        # Extract student data from the current page and append it to the list
+        student_data = extract_student_data(lines)
+        all_student_data.extend(student_data)
+
+# Create a DataFrame from the student data
+df_list = []
+for student_data in all_student_data:
+    register_number = student_data['Register Number']
+    student_name = student_data['Student Name']
+    for subject_data in student_data['Subjects']:
+        subject_code = subject_data['Subject Code']
+        internal_mark = subject_data['Internal Mark']
+        external_mark = subject_data['External Mark']
+        total_mark = subject_data['Total Mark']
+        status = subject_data['Status']
+        df_list.append([register_number, student_name, subject_code, internal_mark, external_mark, total_mark, status])
+
+# Create a DataFrame with appropriate column names
+df = pd.DataFrame(df_list, columns=["Register Number", "Student Name", "Subject Code", "Internal Mark", "External Mark", "Total Mark", "Status"])
+
+# Convert all columns to strings
+df = df.astype(str)
+
+# Save the DataFrame to an Excel file
+df.to_excel("4th.xlsx", index=False)
+print("Success")
