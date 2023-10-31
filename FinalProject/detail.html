@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Final Project for Js</title>
+    <link href="./style.css" type="text/css" rel="stylesheet" />
+    <link href="./details.css" type="text/css" rel="stylesheet" />
+  </head>
+  <body>
+    <header>
+      <!-- TopBar Start -->
+      <div id="top-bar">
+        <!-- Logo -->
+        <div class="logo">
+          <a href="/"
+            ><h4><span>SHOP</span>LANE</h4></a
+          >
+        </div>
+        <!-- Menu Items -->
+        <ul class="nav-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/#clothing">Clothings</a></li>
+          <li><a href="/#accessories">Accessories</a></li>
+        </ul>
+        <!-- Icons -->
+        <div class="icons">
+          <i class="fa fa-search"></i>
+          <div class="cart" id="cartIcon">
+            <a href="/checkout">
+              <i class="fa fa-shopping-cart">
+                <span id="cart-count">0</span>
+              </i>
+            </a>
+          </div>
+          <i class="fa fa-user-circle-o"></i>
+          <div class="burger">
+            <div class="line1"></div>
+            <div class="line2"></div>
+            <div class="line3"></div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <main>
+      <section style="display: flex">
+        <div class="left-column">
+          <img id="productImg" />
+        </div>
+        <div class="right-column">
+          <div>
+            <h1 id="h1"></h1>
+            <h4 id="h2"></h4>
+            <p id="lblprice">Price Rs:<span id="price"></span></p>
+            <h4 id="h3">Description</h4>
+            <p id="des"></p>
+          </div>
+          <div class="product-description">
+            <div class="product-preview">
+              <h3 class="productprview">Product Preview</h3>
+              <div class="previewImg">
+                <img id="img0" class="active" />
+                <img id="img1" />
+                <img id="img2" />
+                <img id="img3" />
+                <img id="img4" />
+              </div>
+            </div>
+          </div>
+          <div class="btndiv">
+               <button id="btn-add-to-cart">Add to cart</button>
+          </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <ul class="online-store">
+        <li><h3>Online Store</h3></li>
+        <li><a href="#">Men Clothing</a></li>
+        <li><a href="#">Women Clothing</a></li>
+        <li><a href="#">Men Accessories</a></li>
+        <li><a href="#">Women Accessories</a></li>
+      </ul>
+      <ul class="helpful-links">
+        <li><h3>Helpful Links</h3></li>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+      <ul class="patners">
+        <li><h3>Patners</h3></li>
+        <li><a href="#">Zara</a></li>
+        <li><a href="#">Pantaloons</a></li>
+        <li><a href="#">Levis</a></li>
+        <li><a href="#">Ucb</a></li>
+        <li><a href="#">+ Many More</a></li>
+      </ul>
+      <ul class="address">
+        <li><h3>Address</h3></li>
+        <li>Building 101</li>
+        <li>Central Avenue</li>
+        <li>LA - 902722</li>
+        <li>United States</li>
+      </ul>
+    </footer>
+
+    <!-- FOOTER SECTION END  -->
+    <script src="https://kit.fontawesome.com/35c398e458.js"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.7.0.min.js"
+      integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"
+    ></script>
+    <script src="detail.js"></script>
+    <link href="./order.js" type="text/css" rel="stylesheet"/>
+  </body>
+</html>
