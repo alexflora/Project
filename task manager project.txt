@@ -1,0 +1,196 @@
+class Task:
+    def __init__(self, task_id, title, description, priority, status):
+        self.id = task_id
+        self.title = title
+        self.description = description
+        self.priority = priority
+        self.status = status
+
+    def __str__(self):
+        return f"Task ID: {self.id}\nTitle: {self.title}\nDescription: {self.description}\nPriority: {self.priority}\nStatus: {self.status}\n"
+
+
+class TaskManager:
+    def __init__(self):
+        self.tasks = []
+
+    def add_task(self, task):
+        self.tasks.append(task)
+
+    def edit_task(self, task_id, title, description, priority, status):
+        for task in self.tasks:
+            if task.id == task_id:
+                task.title = title
+                task.description = description
+                task.priority = priority
+                task.status = status
+                break
+
+    def delete_task(self, task_id):
+        self.tasks = [task for task in self.tasks if task.id != task_id]
+
+    def get_task_by_id(self, task_id):
+        for task in self.tasks:
+            if task.id == task_id:
+                return task
+        return None
+
+    def view_all_tasks(self):
+        for task in self.tasks:
+            print(task)
+
+    def filter_tasks_by_priority(self, priority):
+        filtered_tasks = [task for task in self.tasks if task.priority == priority]
+        for task in filtered_tasks:
+            print(task)
+
+
+def main():
+    task_manager = TaskManager()
+
+    while True:
+        print("\nTask Manager Menu:")
+        print("1. Add Task")
+        print("2. Edit Task")
+        print("3. Delete Task")
+        print("4. View All Tasks")
+        print("5. Filter Tasks by Priority")
+        print("6. Exit")
+
+        choice = input("Enter your choice (1-6): ")
+
+        if choice == '1':
+            task_id = input("Enter Task ID: ")
+            title = input("Enter Title: ")
+            description = input("Enter Description: ")
+            priority = input("Enter Priority (High/Medium/Low): ")
+            status = input("Enter Status (Pending/In Progress/Completed): ")
+            task = Task(task_id, title, description, priority, status)
+            task_manager.add_task(task)
+
+        elif choice == '2':
+            task_id = input("Enter Task ID to edit: ")
+            title = input("Enter Updated Title: ")
+            description = input("Enter Updated Description: ")
+            priority = input("Enter Updated Priority (High/Medium/Low): ")
+            status = input("Enter Updated Status (Pending/In Progress/Completed): ")
+            task_manager.edit_task(task_id, title, description, priority, status)
+
+        elif choice == '3':
+            task_id = input("Enter Task ID to delete: ")
+            task_manager.delete_task(task_id)
+
+        elif choice == '4':
+            task_manager.view_all_tasks()
+
+        elif choice == '5':
+            priority = input("Enter Priority to filter (High/Medium/Low): ")
+            task_manager.filter_tasks_by_priority(priority)
+
+        elif choice == '6':
+            print("Exiting Task Manager. Goodbye!")
+            break
+
+        else:
+            print("Invalid choice. Please enter a number between 1 and 6.")
+
+
+if __name__ == "__main__":
+    main()
+
+
+
+Output:
+
+Python 3.12.0 (tags/v3.12.0:0fb18b0, Oct  2 2023, 13:03:39) [MSC v.1935 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license()" for more information.
+
+=================== RESTART: C:/pythonprogram/task manager.py ==================
+
+Task Manager Menu:
+1. Add Task
+2. Edit Task
+3. Delete Task
+4. View All Tasks
+5. Filter Tasks by Priority
+6. Exit
+Enter your choice (1-6): 1
+Enter Task ID: 1
+Enter Title: Task 1
+Enter Description: Desc 1
+Enter Priority (High/Medium/Low): High
+Enter Status (Pending/In Progress/Completed): Pending
+
+Task Manager Menu:
+1. Add Task
+2. Edit Task
+3. Delete Task
+4. View All Tasks
+5. Filter Tasks by Priority
+6. Exit
+Enter your choice (1-6): 4
+Task ID: 1
+Title: Task 1
+Description: Desc 1
+Priority: High
+Status: Pending
+
+
+Task Manager Menu:
+1. Add Task
+2. Edit Task
+3. Delete Task
+4. View All Tasks
+5. Filter Tasks by Priority
+6. Exit
+Enter your choice (1-6): 2
+Enter Task ID to edit: 1
+Enter Updated Title: Task 1 Edit
+Enter Updated Description: 
+Enter Updated Priority (High/Medium/Low): 
+Enter Updated Status (Pending/In Progress/Completed): 
+
+Task Manager Menu:
+1. Add Task
+2. Edit Task
+3. Delete Task
+4. View All Tasks
+5. Filter Tasks by Priority
+6. Exit
+Enter your choice (1-6): 4
+Task ID: 1
+Title: Task 1 Edit
+Description: 
+Priority: 
+Status: 
+
+
+Task Manager Menu:
+1. Add Task
+2. Edit Task
+3. Delete Task
+4. View All Tasks
+5. Filter Tasks by Priority
+6. Exit
+Enter your choice (1-6): 5
+Enter Priority to filter (High/Medium/Low): High
+
+Task Manager Menu:
+1. Add Task
+2. Edit Task
+3. Delete Task
+4. View All Tasks
+5. Filter Tasks by Priority
+6. Exit
+Enter your choice (1-6): Exit
+Invalid choice. Please enter a number between 1 and 6.
+
+Task Manager Menu:
+1. Add Task
+2. Edit Task
+3. Delete Task
+4. View All Tasks
+5. Filter Tasks by Priority
+6. Exit
+Enter your choice (1-6): 6
+Exiting Task Manager. Goodbye!
